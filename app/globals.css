@@ -1,0 +1,171 @@
+@import "tailwindcss";
+
+/* Class-based Dark Mode (gesteuert durch next-themes) */
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  /* Markenfarben: Tanne / Sand / Terracotta — Luxus trifft Abenteuer */
+  --color-pine-50: #f2f7f4;
+  --color-pine-100: #e0ece5;
+  --color-pine-200: #c2d9cc;
+  --color-pine-300: #9cc0ab;
+  --color-pine-400: #6da186;
+  --color-pine-500: #4a8368;
+  --color-pine-600: #366853;
+  --color-pine-700: #2c5343;
+  --color-pine-800: #234337;
+  --color-pine-900: #16382d;
+  --color-pine-950: #0b241c;
+
+  --color-terra-100: #f9e8de;
+  --color-terra-300: #eab391;
+  --color-terra-400: #d98a5d;
+  --color-terra-500: #c2603a;
+  --color-terra-600: #a54c2b;
+
+  --color-sand-50: #faf8f4;
+  --color-sand-100: #f2ede3;
+  --color-sand-200: #e5dcc9;
+  --color-sand-300: #d3c5a8;
+
+  --color-night-800: #14201b;
+  --color-night-900: #0e1713;
+  --color-night-950: #090f0c;
+
+  --font-sans: var(--font-manrope), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-fraunces), ui-serif, Georgia, serif;
+
+  --shadow-soft: 0 8px 30px rgb(11 36 28 / 0.08);
+  --shadow-lift: 0 20px 60px rgb(11 36 28 / 0.16);
+
+  --animate-kenburns: kenburns 22s ease-in-out infinite alternate;
+  --animate-float: float 7s ease-in-out infinite;
+  --animate-shimmer: shimmer 2.8s linear infinite;
+
+  @keyframes kenburns {
+    0% { transform: scale(1.02) translate(0, 0); }
+    100% { transform: scale(1.12) translate(-1.5%, -1%); }
+  }
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+  @keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+  }
+}
+
+:root {
+  color-scheme: light;
+}
+.dark {
+  color-scheme: dark;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  @apply bg-sand-50 text-pine-950 antialiased dark:bg-night-950 dark:text-sand-50;
+  font-feature-settings: "ss01";
+}
+
+/* ————— Glassmorphism ————— */
+.glass {
+  background: rgb(255 255 255 / 0.62);
+  backdrop-filter: blur(18px) saturate(1.4);
+  -webkit-backdrop-filter: blur(18px) saturate(1.4);
+  border: 1px solid rgb(255 255 255 / 0.55);
+}
+.dark .glass {
+  background: rgb(14 23 19 / 0.62);
+  border-color: rgb(255 255 255 / 0.08);
+}
+.glass-strong {
+  background: rgb(255 255 255 / 0.85);
+  backdrop-filter: blur(24px) saturate(1.5);
+  -webkit-backdrop-filter: blur(24px) saturate(1.5);
+  border: 1px solid rgb(255 255 255 / 0.6);
+}
+.dark .glass-strong {
+  background: rgb(14 23 19 / 0.85);
+  border-color: rgb(255 255 255 / 0.1);
+}
+
+/* ————— Dezent animierter Hintergrund (Aurora) ————— */
+.aurora {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+.aurora::before,
+.aurora::after {
+  content: "";
+  position: absolute;
+  width: 55vw;
+  height: 55vw;
+  border-radius: 50%;
+  filter: blur(90px);
+  opacity: 0.5;
+  animation: aurora-drift 26s ease-in-out infinite alternate;
+}
+.aurora::before {
+  background: radial-gradient(circle, var(--color-pine-200), transparent 65%);
+  top: -20%;
+  left: -10%;
+}
+.aurora::after {
+  background: radial-gradient(circle, var(--color-terra-100), transparent 65%);
+  bottom: -25%;
+  right: -12%;
+  animation-delay: -13s;
+}
+.dark .aurora::before {
+  background: radial-gradient(circle, rgb(54 104 83 / 0.35), transparent 65%);
+}
+.dark .aurora::after {
+  background: radial-gradient(circle, rgb(194 96 58 / 0.18), transparent 65%);
+}
+@keyframes aurora-drift {
+  0% { transform: translate(0, 0) scale(1); }
+  100% { transform: translate(6%, 4%) scale(1.15); }
+}
+
+/* ————— Microinteractions ————— */
+.btn-primary {
+  @apply inline-flex items-center justify-center gap-2 rounded-full bg-pine-800 px-7 py-3.5 font-semibold text-white transition-all duration-300 hover:bg-pine-700 hover:shadow-lift active:scale-[0.97] dark:bg-pine-500 dark:hover:bg-pine-400;
+}
+.btn-secondary {
+  @apply inline-flex items-center justify-center gap-2 rounded-full px-7 py-3.5 font-semibold transition-all duration-300 active:scale-[0.97];
+}
+.card-hover {
+  @apply transition-all duration-500 hover:-translate-y-1.5 hover:shadow-lift;
+}
+
+.text-shimmer {
+  background: linear-gradient(110deg, currentColor 40%, var(--color-terra-400) 50%, currentColor 60%);
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: var(--animate-shimmer);
+}
+
+/* Feine Scrollbar */
+::-webkit-scrollbar { width: 10px; }
+::-webkit-scrollbar-thumb { background: var(--color-pine-300); border-radius: 8px; }
+.dark ::-webkit-scrollbar-thumb { background: var(--color-pine-800); }
+::-webkit-scrollbar-track { background: transparent; }
+
+/* Reduzierte Bewegung respektieren */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  html { scroll-behavior: auto; }
+}
